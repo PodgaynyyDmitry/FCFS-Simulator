@@ -14,6 +14,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 add_executable(FCFS_simulator
   main.cpp
+  process.h process.cpp
 )
 target_link_libraries(FCFS_simulator Qt${QT_VERSION_MAJOR}::Core)
 
