@@ -3,72 +3,72 @@
 process::process(int burst, int time, int id, int importance)
 {
     pid = id;
-    burst_time = burst;
-    burst_left = burst;
-    arrival_time = time;
-    been_seen = false;
-    initial_wait = 0;
-    total_wait = 0;
+    burstTime = burst;
+    burstTimeLeft = burst;
+    arrivalTime = time;
+    seenFlag = false;
+    initialWaitTime = 0;
+    totalWaitTime = 0;
 }
 
-void process::set_pid(int num)
+void process::setPid(int num)
 {
     pid = num;
 }
 
-bool process::get_seen()
+bool process::hasBeenSeen()
 {
-    return been_seen;
+    return seenFlag;
 }
 
-int process::get_burst()
+int process::getBurstTime()
 {
-    return burst_time;
+    return burstTime;
 }
 
-int process::get_pid()
+int process::getPid()
 {
     return pid;
 }
 
-void process::set_arrival(int time)
+void process::setArrivalTime(int time)
 {
-    arrival_time = time;
+    arrivalTime = time;
 }
 
-int process::get_arrival()
+int process::getArrivalTime()
 {
-    return arrival_time;
+    return arrivalTime;
 }
 
-int process::get_burst_left()
+int process::getBurstTimeLeft()
 {
-    return burst_left;
+    return burstTimeLeft;
 }
 
-void process::dec_burst()
+void process::decreaseBurstTime()
 {
-    burst_left = burst_left - 1;
+    burstTimeLeft -=1;
 }
 
-int process::get_initial_wait()
+int process::getInitialWaitTime()
 {
-    return initial_wait;
+    return initialWaitTime;
 }
 
-int process::get_total_wait()
+int process::getTotalWaitTime()
 {
-    return total_wait;
+    return totalWaitTime;
 }
 
-void process::add_wait(int time)
+void process::addWaitTime(int time)
 {
-    total_wait = total_wait + time;
+    totalWaitTime += time;
 }
 
-void process::seen(int time)
+void process::setSeenFlag(int time)
 {
-    been_seen = true;
-    initial_wait = time;
-    total_wait = time;
+    seenFlag = true;
+    initialWaitTime = time;
+    totalWaitTime = time;
 }

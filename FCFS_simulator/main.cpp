@@ -1,19 +1,36 @@
-#include <QCoreApplication>
+//Thomas Zaorski
+//RIN: 660747712
+//EMAIL: zaorst@rpi.edu
 
-int main(int argc, char *argv[])
+#include <iostream>
+#include <stdlib.h>
+#include <cmath>
+#include "scheduler.h"
+
+using namespace std;
+
+//Prints statistics
+
+
+int main()
 {
-    QCoreApplication a(argc, argv);
+    int numberOfProcesses = 20;
 
-    // Set up code that uses the Qt event loop here.
-    // Call a.quit() or a.exit() to quit the application.
-    // A not very useful example would be including
-    // #include <QTimer>
-    // near the top of the file and calling
-    // QTimer::singleShot(5000, &a, &QCoreApplication::quit);
-    // which quits the application after 5 seconds.
+    scheduler sch;
 
-    // If you do not need a running Qt event loop, remove the call
-    // to a.exec() or use the Non-Qt Plain C++ Application template.
+    sch.createProcesses(numberOfProcesses);
+    sch.setMaxWaitTime(0.0);
+    sch.setMinWaitTime(numberOfProcesses * 5000.0);
+    sch.setMaxInitialTime(0.0);
+    sch.setMinInitialTime(numberOfProcesses * 5000.0);
 
-    return a.exec();
+    cout << "First Come First Serve:" << endl << endl;
+
+    sch.firstComeFirstServe();
+    cout << endl;
+
+    sch.statistics(numberOfProcesses);
+
+    return 0;
+
 }
