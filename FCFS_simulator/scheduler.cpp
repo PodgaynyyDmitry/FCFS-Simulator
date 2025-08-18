@@ -6,32 +6,28 @@
 using namespace std;
 scheduler::scheduler() {}
 
-void scheduler::createZeroArrivalTimeProcesses(vector<process>& processe, int num_zero)
+void scheduler::createZeroArrivalTimeProcesses(vector<process>& processe, int numZeroTimeProcesses)
 {
-    int random_burst;
-    int importance;
-    for (int i = 0; i < num_zero; i++)
+    int randomBurstTime;
+    for (int i = 0; i < numZeroTimeProcesses; i++)
     {
-        random_burst = (rand()%3500)+500;
-        importance = (rand()%5);
-        process temp(random_burst, 0, i+1, importance);
+        randomBurstTime= (rand()%3500)+500;
+        process temp(randomBurstTime, 0, i+1);
         processes.push_back(temp);
     }
 }
 
-void scheduler::createProcesses(vector<process>& processe, int num_rand, int num_zero)
+void scheduler::createProcesses(vector<process>& processe, int numNonZeroTimeProcesses, int numZeroTimeProcesses)
 {
-    int random_burst;
-    int importance;
-    for(int i = 0; i < num_rand; i++)
+    int randomBurstTime;
+    for(int i = 0; i < numNonZeroTimeProcesses; i++)
     {
-        random_burst = (rand()%3500)+500;
-        importance = (rand()%5);
+        randomBurstTime= (rand()%3500)+500;
         double lambda = 0.001;
         double r = ((double) rand()/(RAND_MAX));
         double x = -(log(r)/lambda);
         if ( x > 8000 ) { i--; continue; }
-        process temp(random_burst, (int)x, (num_zero + i+1), importance);
+        process temp(randomBurstTime, (int)x, (numZeroTimeProcesses + i+1));
         processes.push_back(temp);
     }
 }
@@ -39,63 +35,63 @@ void scheduler::createProcesses(vector<process>& processe, int num_rand, int num
 void scheduler::createProcesses(int numberOfProcesses)
 {
     srand((unsigned)time(0));
-    int num_rand = numberOfProcesses * .8;
-    int num_zero = numberOfProcesses - num_rand;
-    createZeroArrivalTimeProcesses(processes, num_zero);
-    createProcesses(processes, num_rand, num_zero);
+    int numNonZeroTimeProcesses = numberOfProcesses * .8;
+    int numZeroTimeProcesses = numberOfProcesses - numNonZeroTimeProcesses;
+    createZeroArrivalTimeProcesses(processes, numZeroTimeProcesses);
+    createProcesses(processes, numNonZeroTimeProcesses, numZeroTimeProcesses);
 }
 
-vector<process> scheduler::getQueueForExequte(vector<process>& processes, int clock)
+vector<process> scheduler::getQueueForExequte(vector<process>& processes, int systemTime)
 {
-    int index = processes.size();
+    int numberOfProcesses = processes.size();
     vector <process> queue;
 
-    for(unsigned int i = 0; i < index; i++)
+    for(unsigned int i = 0; i < numberOfProcesses; i++)
     {
-        if (processes[i].getArrivalTime() <= clock)
+        if (processes[i].getArrivalTime() <= systemTime)
         {
             queue.push_back(processes[i]);
             cout << "[time " << processes[i].getArrivalTime() << "ms] Process "
                  << processes[i].getPid() << " created (requires "
                  << processes[i].getBurstTime() << "ms CPU time)" << endl;
             processes.erase(processes.begin() + i);
-            index--;
+            numberOfProcesses--;
             i--;
         }
     }
     return queue;
 }
 
-void scheduler::changeInitialStatistics(vector<process>& queue, int clock)
+void scheduler::changeInitialStatistics(vector<process>& queue, int systemTime)
 {
-    int arriv = clock - queue[0].getArrivalTime();
-    queue[0].setSeenFlag(arriv);
-    totalInitialTime += arriv;
-    if (arriv < minInitialTime)
-        minInitialTime = arriv;
-    if (arriv > maxInitialTime)
-        maxInitialTime = arriv;
-    cout << "[time " << clock << "ms] Process "
+    int arrivalTime = systemTime - queue[0].getArrivalTime();
+    queue[0].setSeenFlag(arrivalTime);
+    totalInitialTime += arrivalTime;
+    if (arrivalTime < minInitialTime)
+        minInitialTime = arrivalTime;
+    if (arrivalTime > maxInitialTime)
+        maxInitialTime = arrivalTime;
+    cout << "[time " << systemTime << "ms] Process "
          << queue[0].getPid() << " accessed CPU for the first time (initial wait time "
          << queue[0].getInitialWaitTime() << "ms)" << endl;
 }
 
-void scheduler::changeCompletedStatistics(vector<process>& queue, int clock)
+void scheduler::changeCompletedStatistics(vector<process>& queue, int systemTime)
 {
-    int fwait = ((clock + 1) - queue[0].getBurstTime() - queue[0].getArrivalTime());
-    cout << "[time " << clock + 1
+    int waitTime = ((systemTime + 1) - queue[0].getBurstTime() - queue[0].getArrivalTime());
+    cout << "[time " << systemTime + 1
          << "ms] Process " << queue[0].getPid()
          << " completed its CPU burst (turnaround time "
-         << ((clock + 1) - queue[0].getArrivalTime())
+         << ((systemTime + 1) - queue[0].getArrivalTime())
          << "ms, initial wait time " << queue[0].getInitialWaitTime()
-         << "ms, total wait time " << fwait << "ms)" << endl;
+         << "ms, total wait time " << waitTime << "ms)" << endl;
 
-    int turn = ((clock + 1) - queue[0].getArrivalTime());
+    int turn = ((systemTime + 1) - queue[0].getArrivalTime());
     totalTurnaround += turn;
-    if (fwait < minWaitTime)
-        minWaitTime = fwait;
-    if (fwait > maxWaitTime)
-        maxWaitTime = fwait;
+    if (waitTime < minWaitTime)
+        minWaitTime = waitTime;
+    if (waitTime > maxWaitTime)
+        maxWaitTime = waitTime;
     if (turn < minTurnaround)
         minTurnaround = turn;
     if (turn > maxTurnaround)
@@ -104,43 +100,42 @@ void scheduler::changeCompletedStatistics(vector<process>& queue, int clock)
 
 void scheduler::firstComeFirstServe()
 {
-    int num_completed = 0;
-    int clock = 0;
-    int last_pid = 0;
+    int numberOfCompletedProcesses = 0;
+    int systemTime = 0;
+    int lastPid = 0;
     vector <process> queue;
-    bool cswitch = false;
-    int num_processes = processes.size();
+    int numberOfProcesses = processes.size();
 
-    while(num_completed != num_processes)
+    while(numberOfCompletedProcesses != numberOfProcesses)
     {
-        vector <process> arrivals = getQueueForExequte(processes, clock);
+        vector <process> arrivals = getQueueForExequte(processes, systemTime);
         queue.insert(queue.end(), arrivals.begin(), arrivals.end());
 
         if (queue.size() != 0)
         {
             if (queue[0].hasBeenSeen() == false)
-                changeInitialStatistics(queue, clock);
+                changeInitialStatistics(queue, systemTime);
 
             queue[0].decreaseBurstTime();
 
             // Содержимое тоже вынести в отдельный метод
             if (queue[0].getBurstTimeLeft() == 0)
             {
-                changeCompletedStatistics(queue, clock);
-                last_pid = queue[0].getPid();
+                changeCompletedStatistics(queue, systemTime);
+                lastPid = queue[0].getPid();
                 queue.erase(queue.begin());
-                num_completed++;
+                numberOfCompletedProcesses++;
 
                 if (queue.size() != 0)
                 {
-                    cout << "[time " << clock + 1 << "ms] Context switch (swapped out process "
-                         << last_pid << " for process " << queue[0].getPid() << ")" << endl;
+                    cout << "[time " << systemTime + 1 << "ms] Context switch (swapped out process "
+                         << lastPid << " for process " << queue[0].getPid() << ")" << endl;
 
-                    clock = clock + contextSwitch;
+                    systemTime = systemTime + contextSwitch;
                 }
             }
         }
-        clock++;
+        systemTime++;
     }
 }
 
@@ -148,6 +143,7 @@ void scheduler::statistics(int numberOfProcesses)
 {
     cout << "Turnaround time: min ";
     printf("%.3f", minTurnaround);
+    //cout<< minTurnaround;
     cout << "ms";
     cout << "; avg ";
     printf("%.3f", totalTurnaround/numberOfProcesses);

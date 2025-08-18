@@ -12,7 +12,7 @@ private:
     int totalWaitTime;
     int pid;
 public:
-    process(int burst, int time, int id, int importance);
+    process(int burst, int time, int id);
     void setArrivalTime(int time);
     void setPid(int num);
     int getArrivalTime();

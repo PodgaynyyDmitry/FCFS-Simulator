@@ -1,16 +1,9 @@
-//Thomas Zaorski
-//RIN: 660747712
-//EMAIL: zaorst@rpi.edu
-
 #include <iostream>
 #include <stdlib.h>
 #include <cmath>
 #include "scheduler.h"
 
 using namespace std;
-
-//Prints statistics
-
 
 int main()
 {

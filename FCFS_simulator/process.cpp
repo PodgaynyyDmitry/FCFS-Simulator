@@ -1,6 +1,6 @@
 #include "process.h"
 
-process::process(int burst, int time, int id, int importance)
+process::process(int burst, int time, int id)
 {
     pid = id;
     burstTime = burst;

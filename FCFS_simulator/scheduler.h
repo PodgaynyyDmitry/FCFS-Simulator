@@ -39,8 +39,6 @@ public:
     void setMinInitialTime(double time);
     void setMaxInitialTime(double time);
 
-  //  void setTotalTurnAround(double time);
-
     void statistics(int numberOfProcesses);
 };
 
