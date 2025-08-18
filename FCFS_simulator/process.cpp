@@ -8,12 +8,6 @@ process::process(int burst, int time, int id)
     arrivalTime = time;
     seenFlag = false;
     initialWaitTime = 0;
-    totalWaitTime = 0;
-}
-
-void process::setPid(int num)
-{
-    pid = num;
 }
 
 bool process::hasBeenSeen()
@@ -56,19 +50,8 @@ int process::getInitialWaitTime()
     return initialWaitTime;
 }
 
-int process::getTotalWaitTime()
-{
-    return totalWaitTime;
-}
-
-void process::addWaitTime(int time)
-{
-    totalWaitTime += time;
-}
-
 void process::setSeenFlag(int time)
 {
     seenFlag = true;
     initialWaitTime = time;
-    totalWaitTime = time;
 }

@@ -25,12 +25,12 @@ private:
     vector<process> getQueueForExequte(vector<process>& processes, int clock);
     void changeInitialStatistics(vector<process>& queue, int clock);
     void changeCompletedStatistics(vector<process>& queue, int clock);
-    void createZeroArrivalTimeProcesses(vector<process>& processe, int num_zero);
-    void createProcesses(vector<process>& processe, int num_rand, int num_zero);
+    void createZeroArrivalTimeProcesses(int num_zero);
+    void createProcesses(int num_rand, int num_zero);
 
 
 public:
-    scheduler();
+    scheduler(double minWait, double maxWait, double minInitial, double maxInitial);
     void createProcesses(int numberOfProcesses);
     void firstComeFirstServe();
 

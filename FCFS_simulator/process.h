@@ -4,24 +4,21 @@
 class process
 {
 private:
-    int arrivalTime; //время начала
-    int burstTime; // Требуемоу время для выполнения процесса
-    int burstTimeLeft; // Оставшееся время выполнения процесса
+    int arrivalTime;
+    int burstTime;
+    int burstTimeLeft;
     bool seenFlag;
     int initialWaitTime;
-    int totalWaitTime;
     int pid;
 public:
     process(int burst, int time, int id);
     void setArrivalTime(int time);
-    void setPid(int num);
     int getArrivalTime();
     int getBurstTime();
     int getBurstTimeLeft();
     void decreaseBurstTime();
     int getInitialWaitTime();
     int getTotalWaitTime();
-    void addWaitTime(int time);
     bool hasBeenSeen();
     void setSeenFlag(int time);
     int getPid();

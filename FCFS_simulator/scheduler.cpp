@@ -2,11 +2,18 @@
 #include <time.h>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
-scheduler::scheduler() {}
+scheduler::scheduler(double minWait, double maxWait, double minInitial, double maxInitial)
+{
+    maxWaitTime = maxWait;
+    minWaitTime = minWait;
+    maxInitialTime = maxInitial;
+    minInitialTime = minInitial;
+}
 
-void scheduler::createZeroArrivalTimeProcesses(vector<process>& processe, int numZeroTimeProcesses)
+void scheduler::createZeroArrivalTimeProcesses(int numZeroTimeProcesses)
 {
     int randomBurstTime;
     for (int i = 0; i < numZeroTimeProcesses; i++)
@@ -17,7 +24,7 @@ void scheduler::createZeroArrivalTimeProcesses(vector<process>& processe, int nu
     }
 }
 
-void scheduler::createProcesses(vector<process>& processe, int numNonZeroTimeProcesses, int numZeroTimeProcesses)
+void scheduler::createProcesses(int numNonZeroTimeProcesses, int numZeroTimeProcesses)
 {
     int randomBurstTime;
     for(int i = 0; i < numNonZeroTimeProcesses; i++)
@@ -37,8 +44,8 @@ void scheduler::createProcesses(int numberOfProcesses)
     srand((unsigned)time(0));
     int numNonZeroTimeProcesses = numberOfProcesses * .8;
     int numZeroTimeProcesses = numberOfProcesses - numNonZeroTimeProcesses;
-    createZeroArrivalTimeProcesses(processes, numZeroTimeProcesses);
-    createProcesses(processes, numNonZeroTimeProcesses, numZeroTimeProcesses);
+    createZeroArrivalTimeProcesses(numZeroTimeProcesses);
+    createProcesses(numNonZeroTimeProcesses, numZeroTimeProcesses);
 }
 
 vector<process> scheduler::getQueueForExequte(vector<process>& processes, int systemTime)
@@ -88,6 +95,7 @@ void scheduler::changeCompletedStatistics(vector<process>& queue, int systemTime
 
     int turn = ((systemTime + 1) - queue[0].getArrivalTime());
     totalTurnaround += turn;
+    totalWaitTime += waitTime;
     if (waitTime < minWaitTime)
         minWaitTime = waitTime;
     if (waitTime > maxWaitTime)
@@ -118,7 +126,6 @@ void scheduler::firstComeFirstServe()
 
             queue[0].decreaseBurstTime();
 
-            // Содержимое тоже вынести в отдельный метод
             if (queue[0].getBurstTimeLeft() == 0)
             {
                 changeCompletedStatistics(queue, systemTime);
@@ -141,35 +148,19 @@ void scheduler::firstComeFirstServe()
 
 void scheduler::statistics(int numberOfProcesses)
 {
-    cout << "Turnaround time: min ";
-    printf("%.3f", minTurnaround);
-    //cout<< minTurnaround;
-    cout << "ms";
-    cout << "; avg ";
-    printf("%.3f", totalTurnaround/numberOfProcesses);
-    cout << "ms";
-    cout << "; max ";
-    printf("%.3f", maxTurnaround);
-    cout << "ms" << endl;
-    cout << "Initial wait time: min ";
-    printf("%.3f", minInitialTime);
-    cout << "ms";
-    cout << "; avg ";
-    printf("%.3f", totalInitialTime/numberOfProcesses);
-    cout << "ms";
-    cout << "; max ";
-    printf("%.3f", maxInitialTime);
-    cout << "ms" << endl;
-    cout << "Total wait time: min ";
-    printf("%.3f", minWaitTime);
-    cout << "ms";
-    cout << "; avg ";
-    printf("%.3f", (maxWaitTime + minWaitTime)/numberOfProcesses);
-    cout << "ms";
-    cout << "; max ";
-    printf("%.3f", maxWaitTime);
-    cout << "ms" << endl;
+    cout << fixed << setprecision(3);
     cout << endl;
+    cout << "Turnaround time: min " << minTurnaround
+         << "ms; avg " << totalTurnaround / numberOfProcesses
+         << "ms; max " << maxTurnaround << "ms" << endl;
+
+    cout << "Initial wait time: min " << minInitialTime
+         << "ms; avg " << totalInitialTime / numberOfProcesses
+         << "ms; max " << maxInitialTime << "ms" << endl;
+
+    cout << "Total wait time: min " << minWaitTime
+         << "ms; avg " << totalWaitTime / numberOfProcesses
+         << "ms; max " << maxWaitTime << "ms" << endl << endl;
 }
 
 
