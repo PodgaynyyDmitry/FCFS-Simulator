@@ -19,14 +19,14 @@
 
 1. Установите компилятор и cmake.
 2. Клонируйте репозиторий:
-    git clone https://github.com/PodgaynyyDmitry/FCFS-Simulator.git
-    cd FCFS-Simulator/FCFS_simulator
+   * git clone https://github.com/PodgaynyyDmitry/FCFS-Simulator.git
+   * cd FCFS-Simulator/FCFS_simulator
 
 3. Создайте отдельную папку для сборки:
-    mkdir build && cd build
+   * mkdir build && cd build
 
 4. Сборка:
-    cmake .. -DCMAKE_BUILD_TYPE=Release
-    cmake --build .
+   * cmake .. -DCMAKE_BUILD_TYPE=Release
+   * cmake --build .
 
 5. Запустите собранный проект.
