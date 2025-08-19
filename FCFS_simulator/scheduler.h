@@ -9,37 +9,31 @@ using namespace std;
 class scheduler
 {
 private:
-    vector <process> processes;
+    vector <process> incomingProcesses;
 
-    int contextSwitch = 14;
-    double totalTurnaround = 0.0;
+    int contextSwitchDelay = 14;
+    double totalTurnaroundTime = 0.0;
     double totalWaitTime = 0.0;
     double totalInitialTime = 0.0;
-    double maxTurnaround = 0.0;
-    double minTurnaround = 5000.0;
+    double maxTurnaroundTime = 0.0;
+    double minTurnaroundTime = 5000.0;
     double maxWaitTime;
     double minWaitTime;
     double maxInitialTime;
     double minInitialTime;
 
-    vector<process> getQueueForExequte(vector<process>& processes, int clock);
-    void changeInitialStatistics(vector<process>& queue, int clock);
-    void changeCompletedStatistics(vector<process>& queue, int clock);
-    void createZeroArrivalTimeProcesses(int num_zero);
-    void createProcesses(int num_rand, int num_zero);
+    vector<process> extractReadyProcesses(int systemTime);
+    void updateInitialWaitStatistics(vector<process>& queue, int systemTime);
+    void updateCompletionStatistics(vector<process>& queue, int systemTime);
+    void createProcessesWithZeroArrival(int num_zero);
+    void createProcessesWithRandomArrival(int num_rand, int num_zero);
 
 
 public:
     scheduler(double minWait, double maxWait, double minInitial, double maxInitial);
     void createProcesses(int numberOfProcesses);
-    void firstComeFirstServe();
-
-    void setMinWaitTime(double time);
-    void setMaxWaitTime(double time);
-    void setMinInitialTime(double time);
-    void setMaxInitialTime(double time);
-
-    void statistics(int numberOfProcesses);
+    void simulateFCFS();
+    void printStatistics(int numberOfProcesses);
 };
 
 #endif // SCHEDULER_H

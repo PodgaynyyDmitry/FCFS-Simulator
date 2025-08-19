@@ -15,8 +15,8 @@ int main()
 
     cout << "First Come First Serve:" << endl << endl;
 
-    sch.firstComeFirstServe();
-    sch.statistics(numberOfProcesses);
+    sch.simulateFCFS();
+    sch.printStatistics(numberOfProcesses);
 
     return 0;
 

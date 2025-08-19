@@ -7,7 +7,7 @@ private:
     int arrivalTime;
     int burstTime;
     int burstTimeLeft;
-    bool seenFlag;
+    bool started;
     int initialWaitTime;
     int pid;
 public:
@@ -19,8 +19,9 @@ public:
     void decreaseBurstTime();
     int getInitialWaitTime();
     int getTotalWaitTime();
-    bool hasBeenSeen();
-    void setSeenFlag(int time);
+    bool hasStarted();
+    void markStarted();
+    void setInitialTime(int time);
     int getPid();
 };
 

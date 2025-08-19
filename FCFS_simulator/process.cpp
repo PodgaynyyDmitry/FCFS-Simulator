@@ -6,13 +6,13 @@ process::process(int burst, int time, int id)
     burstTime = burst;
     burstTimeLeft = burst;
     arrivalTime = time;
-    seenFlag = false;
+    started = false;
     initialWaitTime = 0;
 }
 
-bool process::hasBeenSeen()
+bool process::hasStarted()
 {
-    return seenFlag;
+    return started;
 }
 
 int process::getBurstTime()
@@ -50,8 +50,12 @@ int process::getInitialWaitTime()
     return initialWaitTime;
 }
 
-void process::setSeenFlag(int time)
+void process::markStarted()
 {
-    seenFlag = true;
-    initialWaitTime = time;
+    started = true;
+
+}
+void process::setInitialTime(int time)
+{
+     initialWaitTime = time;
 }
