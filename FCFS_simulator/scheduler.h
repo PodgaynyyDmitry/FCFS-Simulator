@@ -6,10 +6,10 @@
 
 using namespace std;
 
-class scheduler
+class Scheduler
 {
 private:
-    vector <process> incomingProcesses;
+    vector <Process> incomingProcesses;
 
     int contextSwitchDelay = 14;
     double totalTurnaroundTime = 0.0;
@@ -22,15 +22,15 @@ private:
     double maxInitialTime;
     double minInitialTime;
 
-    vector<process> extractReadyProcesses(int systemTime);
-    void updateInitialWaitStatistics(vector<process>& queue, int systemTime);
-    void updateCompletionStatistics(vector<process>& queue, int systemTime);
+    vector<Process> extractReadyProcesses(int systemTime);
+    void updateInitialWaitStatistics(vector<Process>& queue, int systemTime);
+    void updateCompletionStatistics(vector<Process>& queue, int systemTime);
     void createProcessesWithZeroArrival(int num_zero);
     void createProcessesWithRandomArrival(int num_rand, int num_zero);
 
 
 public:
-    scheduler(double minWait, double maxWait, double minInitial, double maxInitial);
+    Scheduler(double minWait, double maxWait, double minInitial, double maxInitial);
     void createProcesses(int numberOfProcesses);
     void simulateFCFS();
     void printStatistics(int numberOfProcesses);

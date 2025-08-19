@@ -9,15 +9,18 @@ int main()
 {
     int numberOfProcesses = 20;
 
-    scheduler sch(0.0, numberOfProcesses * 5000.0, 0.0, numberOfProcesses * 5000.0);
+    Scheduler scheduler(0.0, numberOfProcesses * 5000.0, 0.0, numberOfProcesses * 5000.0);
 
-    sch.createProcesses(numberOfProcesses);
+    scheduler.createProcesses(numberOfProcesses);
 
     cout << "First Come First Serve:" << endl << endl;
 
-    sch.simulateFCFS();
-    sch.printStatistics(numberOfProcesses);
+    scheduler.simulateFCFS();
+    scheduler.printStatistics(numberOfProcesses);
+
+    string key;
+    cout << "Press any key..." << endl;
+    cin >> key;
 
     return 0;
-
 }

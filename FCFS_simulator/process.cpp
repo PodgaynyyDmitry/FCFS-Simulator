@@ -1,6 +1,6 @@
 #include "process.h"
 
-process::process(int burst, int time, int id)
+Process::Process(int burst, int time, int id)
 {
     pid = id;
     burstTime = burst;
@@ -10,52 +10,52 @@ process::process(int burst, int time, int id)
     initialWaitTime = 0;
 }
 
-bool process::hasStarted()
+bool Process::hasStarted()
 {
     return started;
 }
 
-int process::getBurstTime()
+int Process::getBurstTime()
 {
     return burstTime;
 }
 
-int process::getPid()
+int Process::getPid()
 {
     return pid;
 }
 
-void process::setArrivalTime(int time)
+void Process::setArrivalTime(int time)
 {
     arrivalTime = time;
 }
 
-int process::getArrivalTime()
+int Process::getArrivalTime()
 {
     return arrivalTime;
 }
 
-int process::getBurstTimeLeft()
+int Process::getBurstTimeLeft()
 {
     return burstTimeLeft;
 }
 
-void process::decreaseBurstTime()
+void Process::decreaseBurstTime()
 {
     burstTimeLeft -=1;
 }
 
-int process::getInitialWaitTime()
+int Process::getInitialWaitTime()
 {
     return initialWaitTime;
 }
 
-void process::markStarted()
+void Process::markStarted()
 {
     started = true;
 
 }
-void process::setInitialTime(int time)
+void Process::setInitialTime(int time)
 {
      initialWaitTime = time;
 }
